@@ -1,7 +1,6 @@
 import argparse
 import os
 import time
-from utils import write_srt
 import whisper
 from whisper.utils import get_writer
 
@@ -59,9 +58,8 @@ def main(args):
                 condition_on_previous_text=args.condition_on_previous_text)
             with open(os.path.join(args.output_directory, file_name + '.srt'),
                       "w", encoding="utf-8") as srt_file:
-                write_srt(result["segments"], file=srt_file)
                 get_writer("srt", args.output_directory)(
-                    result["segments"], file=srt_file)
+                    result["segments"], srt_file)
             end_time = time.time()
             subtitle_time = end_time - start_time
             total_time += subtitle_time
@@ -75,7 +73,7 @@ def main(args):
         f"Generated subtitles for {len(file_array)} files in {total_time:.2f}s")
 
 
-if __name__ == '__main__':
+def cli():
     WS_DESCRIPTION = "This is a Python script that utilizes the OpenAI Whisper library to generate .srt files with subtitles for compatible files. Before running the script, ensure that the required dependencies, namely OpenAI's Whisper, are installed. The script generates .srt files for each file found in the directory using Whisper. Please note that the generated subtitles may not be completely accurate, and manual correction may be necessary."
     parser = argparse.ArgumentParser(description=WS_DESCRIPTION)
     parser.add_argument('--model', type=str, default='large',
@@ -90,3 +88,7 @@ if __name__ == '__main__':
                         help='Condition on previous text (see Whisper documentation)')
     args = parser.parse_args()
     main(args)
+
+
+if __name__ == '__main__':
+    cli()
