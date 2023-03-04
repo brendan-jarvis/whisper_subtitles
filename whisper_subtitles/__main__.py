@@ -44,10 +44,14 @@ def main(args):
 
         # decode the audio and save as .srt
         try:
+            file_name = os.path.splitext(file)[0]
+            srt_path = os.path.join(args.output_directory, file_name + '.srt')
+            if os.path.exists(srt_path):
+                print(f"{srt_path} already exists. Skipping...")
+                continue
             result = whisper.transcribe(model, audio, verbose=True)
             if len(result["segments"]) == 0:
                 raise Exception(f"No subtitles generated for {file}")
-            file_name = os.path.splitext(file)[0]
             with open(os.path.join(args.output_directory, file_name + '.srt'),
                       "w", encoding="utf-8") as srt_file:
                 write_srt(result["segments"], file=srt_file)
@@ -58,7 +62,8 @@ def main(args):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Whisper Subtitles')
+    WS_DESCRIPTION = "This is a Python script that utilizes the OpenAI Whisper library to generate .srt files with subtitles for compatible files. Before running the script, ensure that the required dependencies, namely OpenAI's Whisper, are installed. The script generates .srt files for each file found in the directory using Whisper. Please note that the generated subtitles may not be completely accurate, and manual correction may be necessary."
+    parser = argparse.ArgumentParser(description=WS_DESCRIPTION)
     parser.add_argument('--model', type=str, default='large',
                         help='Language model to use. Options: tiny, base, small, medium, large')
     parser.add_argument('--directory', type=str, default='.',
