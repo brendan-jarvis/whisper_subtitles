@@ -44,12 +44,11 @@ def main():
 
         # decode the audio and save as .srt
         try:
-            result = whisper.transcribe(
-                model, audio, verbose=True)
+            result = whisper.transcribe(model, audio, verbose=True)
             if len(result["segments"]) == 0:
                 raise Exception(f"No subtitles generated for {file}")
             file_name = os.path.splitext(file)[0]
-            with open(file_name+'.srt', "w", encoding="utf-8") as srt_file:
+            with open(file_name + '.srt', "w", encoding="utf-8") as srt_file:
                 write_srt(result["segments"], file=srt_file)
             print(f"Subtitles for {file} saved as {file_name}.srt")
         except Exception as e:
