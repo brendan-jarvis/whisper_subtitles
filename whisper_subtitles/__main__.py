@@ -1,10 +1,11 @@
+import argparse
 import os
 from utils import write_srt
 import whisper
 
 
-def main():
-    model = "large"
+def main(args):
+    model = args.model
     file_array = []
     supported_extensions = [".mp4", ".m4a",
                             ".mp3", ".mpeg", ".mpga", ".wav", ".webm"]
@@ -23,7 +24,7 @@ def main():
     print("Searching for files to subtitle...")
 
     try:
-        for file in os.listdir():
+        for file in os.listdir(args.directory):
             if file.endswith(tuple(supported_extensions)):
                 # Add to array
                 file_array.append(file)
@@ -40,7 +41,7 @@ def main():
         print(f"Generating subtitles for {file}...")
 
         # load audio and pad/trim it to fit 30 seconds
-        audio = whisper.load_audio(file)
+        audio = whisper.load_audio(os.path.join(args.directory, file))
 
         # decode the audio and save as .srt
         try:
@@ -48,7 +49,7 @@ def main():
             if len(result["segments"]) == 0:
                 raise Exception(f"No subtitles generated for {file}")
             file_name = os.path.splitext(file)[0]
-            with open(file_name + '.srt', "w", encoding="utf-8") as srt_file:
+            with open(os.path.join(args.output_directory, file_name + '.srt'), "w", encoding="utf-8") as srt_file:
                 write_srt(result["segments"], file=srt_file)
             print(f"Subtitles for {file} saved as {file_name}.srt")
         except Exception as e:
@@ -57,4 +58,12 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description='Whisper Subtitles')
+    parser.add_argument('--model', type=str, default='large',
+                        help='Language model to use. Options: tiny, base, small, medium, large')
+    parser.add_argument('--directory', type=str, default='.',
+                        help='Directory containing files to subtitle')
+    parser.add_argument('--output_directory', type=str,
+                        default='.', help='Directory to save subtitle files')
+    args = parser.parse_args()
+    main(args)
