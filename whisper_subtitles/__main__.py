@@ -47,7 +47,8 @@ def main(args):
         # decode the audio and save as .srt
         try:
             start_time = time.time()
-            result = whisper.transcribe(model, audio, verbose=True)
+            result = model.transcribe(
+                audio, verbose=True, language=args.language)
             file_name = os.path.splitext(file)[0]
             with open(os.path.join(args.output_directory, file_name + '.srt'),
                       "w", encoding="utf-8") as srt_file:
@@ -74,5 +75,7 @@ if __name__ == '__main__':
                         help='Directory containing files to subtitle')
     parser.add_argument('--output_directory', type=str,
                         default='.', help='Directory to save subtitle files')
+    parser.add_argument('--language', type=str, default='en',
+                        help='Language to use (see Whisper documentation for options)')
     args = parser.parse_args()
     main(args)
