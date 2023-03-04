@@ -34,7 +34,6 @@ def main(args):
         print(f"Error: {e}")
         return
 
-    # print number of files added to array
     print(f"Found {len(file_array)} files to subtitle.")
 
     total_time = 0
@@ -47,7 +46,6 @@ def main(args):
 
         print(f"Generating subtitles for {file}...")
 
-        # load audio
         audio = whisper.load_audio(os.path.join(args.directory, file))
 
         # decode the audio and save as .srt
