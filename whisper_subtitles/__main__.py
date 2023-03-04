@@ -26,7 +26,6 @@ def main(args):
     try:
         for file in os.listdir(args.directory):
             if file.endswith(tuple(supported_extensions)):
-                # Add to array
                 file_array.append(file)
         if len(file_array) == 0:
             raise Exception("No files found")
@@ -40,7 +39,7 @@ def main(args):
     for file in file_array:
         print(f"Generating subtitles for {file}...")
 
-        # load audio and pad/trim it to fit 30 seconds
+        # load audio
         audio = whisper.load_audio(os.path.join(args.directory, file))
 
         # decode the audio and save as .srt
@@ -49,7 +48,8 @@ def main(args):
             if len(result["segments"]) == 0:
                 raise Exception(f"No subtitles generated for {file}")
             file_name = os.path.splitext(file)[0]
-            with open(os.path.join(args.output_directory, file_name + '.srt'), "w", encoding="utf-8") as srt_file:
+            with open(os.path.join(args.output_directory, file_name + '.srt'),
+                      "w", encoding="utf-8") as srt_file:
                 write_srt(result["segments"], file=srt_file)
             print(f"Subtitles for {file} saved as {file_name}.srt")
         except Exception as e:
