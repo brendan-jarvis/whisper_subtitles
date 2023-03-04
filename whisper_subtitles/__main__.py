@@ -3,6 +3,7 @@ import os
 import time
 from utils import write_srt
 import whisper
+from whisper.utils import get_writer
 
 
 def main(args):
@@ -39,6 +40,12 @@ def main(args):
 
     total_time = 0
     for file in file_array:
+        file_name = os.path.splitext(file)[0]
+        srt_path = os.path.join(args.output_directory, file_name + '.srt')
+        if os.path.exists(srt_path):
+            print(f"{srt_path} already exists. Skipping...")
+            continue
+
         print(f"Generating subtitles for {file}...")
 
         # load audio
@@ -48,11 +55,13 @@ def main(args):
         try:
             start_time = time.time()
             result = model.transcribe(
-                audio, verbose=True, language=args.language)
-            file_name = os.path.splitext(file)[0]
+                audio, verbose=True, language=args.language,
+                condition_on_previous_text=args.condition_on_previous_text)
             with open(os.path.join(args.output_directory, file_name + '.srt'),
                       "w", encoding="utf-8") as srt_file:
                 write_srt(result["segments"], file=srt_file)
+                get_writer("srt", args.output_directory)(
+                    result["segments"], file=srt_file)
             end_time = time.time()
             subtitle_time = end_time - start_time
             total_time += subtitle_time
@@ -77,5 +86,7 @@ if __name__ == '__main__':
                         default='.', help='Directory to save subtitle files')
     parser.add_argument('--language', type=str, default='en',
                         help='Language to use (see Whisper documentation for options)')
+    parser.add_argument('--condition_on_previous_text', type=bool, default=False,
+                        help='Condition on previous text (see Whisper documentation)')
     args = parser.parse_args()
     main(args)
