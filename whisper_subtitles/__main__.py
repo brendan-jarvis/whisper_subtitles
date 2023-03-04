@@ -1,5 +1,6 @@
 import argparse
 import os
+import time
 from utils import write_srt
 import whisper
 
@@ -36,6 +37,7 @@ def main(args):
     # print number of files added to array
     print(f"Found {len(file_array)} files to subtitle.")
 
+    total_time = 0
     for file in file_array:
         print(f"Generating subtitles for {file}...")
 
@@ -44,21 +46,23 @@ def main(args):
 
         # decode the audio and save as .srt
         try:
-            file_name = os.path.splitext(file)[0]
-            srt_path = os.path.join(args.output_directory, file_name + '.srt')
-            if os.path.exists(srt_path):
-                print(f"{srt_path} already exists. Skipping...")
-                continue
+            start_time = time.time()
             result = whisper.transcribe(model, audio, verbose=True)
-            if len(result["segments"]) == 0:
-                raise Exception(f"No subtitles generated for {file}")
+            file_name = os.path.splitext(file)[0]
             with open(os.path.join(args.output_directory, file_name + '.srt'),
                       "w", encoding="utf-8") as srt_file:
                 write_srt(result["segments"], file=srt_file)
-            print(f"Subtitles for {file} saved as {file_name}.srt")
+            end_time = time.time()
+            subtitle_time = end_time - start_time
+            total_time += subtitle_time
+            print(
+                f"Subtitles for {file} saved as {file_name}.srt in {subtitle_time:.2f}s")
         except Exception as e:
             print(f"Error: {e}")
             continue
+
+    print(
+        f"Generated subtitles for {len(file_array)} files in {total_time:.2f}s")
 
 
 if __name__ == '__main__':
