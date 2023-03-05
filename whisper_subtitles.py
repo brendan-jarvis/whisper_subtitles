@@ -2,7 +2,7 @@ import argparse
 import os
 import time
 import whisper
-from whisper.utils import get_writer
+from utils import write_srt
 
 
 def main(args):
@@ -39,7 +39,7 @@ def main(args):
     total_time = 0
     for file in file_array:
         file_name = os.path.splitext(file)[0]
-        srt_path = os.path.join(args.output_directory, file_name + '.srt')
+        srt_path = os.path.join(args.output_directory, file_name) + '.srt'
         if os.path.exists(srt_path):
             print(f"{srt_path} already exists. Skipping...")
             continue
@@ -56,8 +56,8 @@ def main(args):
                 condition_on_previous_text=args.condition_on_previous_text)
             with open(os.path.join(args.output_directory, file_name + '.srt'),
                       "w", encoding="utf-8") as srt_file:
-                get_writer("srt", args.output_directory)(
-                    result["segments"], srt_file)
+                write_srt(result["segments"], srt_file)
+
             end_time = time.time()
             subtitle_time = end_time - start_time
             total_time += subtitle_time
