@@ -2,6 +2,12 @@
 
 This is a Python script that utilizes the OpenAI Whisper library to generate .srt files with subtitles for compatible audio and video files. The script generates .srt files for each file found in the specified directory using Whisper. Please note that the generated subtitles may not be completely accurate, and manual correction may be necessary.
 
+## Uses
+
+1. Transcribing audio/video content locally.
+2. Fallback option for adding subtitles to movies/TV shows that don't already have them.
+3. Adding lyrics to a song for DIY Spotify Karaoke.
+
 ## Installation
 
 To use the WhisperSubtitles Python script, you'll need to create a virtual environment and install the required dependencies. Here's how you can do that:
@@ -39,6 +45,12 @@ pip install -r requirements.txt
 
 This command will install all the necessary dependencies for the script to run, including OpenAI's Whisper library and its dependencies.
 
+Whisper requires Python3.7+ and a recent version of PyTorch (I used PyTorch 1.13.1):
+
+- [Python](https://www.python.org/downloads/?ref=news-tutorials-ai-research) and
+- [PyTorch](https://pytorch.org/get-started/locally/?ref=news-tutorials-ai-research), also
+- [CUDA](https://developer.nvidia.com/cuda-downloads)
+
 Finally, you can run the whisper_subtitles.py script by running the following command:
 
 ```sh
@@ -51,8 +63,9 @@ That's it! You should now be able to use the WhisperSubtitles script to generate
 
 ### Tips
 
-1. You can edit the generated subtitles using [Subtitle Edit](https://github.com/SubtitleEdit/subtitleedit)
-2. You could try "automagically" synchronizing subtitles using [FFsubsync](https://github.com/smacke/ffsubsync) - **Note: this project is intended to re-align timing on otherwise 100% accurate subtitles and may not be helpful for correcting timings on AI-generated subtitles.**
+1. Assuming English audio the 'medium.en' produces good enough results in a relatively quick amount of time.
+2. You can edit the generated subtitles using [Subtitle Edit](https://github.com/SubtitleEdit/subtitleedit)
+3. You could try "automagically" synchronizing subtitles using [FFsubsync](https://github.com/smacke/ffsubsync) - **Note: this project is intended to re-align timing on otherwise 100% accurate subtitles and may not be helpful for correcting timings on AI-generated subtitles.**
 
 ## Usage
 
