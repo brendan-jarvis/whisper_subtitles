@@ -69,6 +69,7 @@ def main(args):
                 language=args.language,
                 condition_on_previous_text=args.condition_on_previous_text,
             )
+            # Load subtitle file from OpenAI Whisper transcript
             subs = load_from_whisper(result)
             subs.save(subtitle_path)
 
@@ -141,7 +142,7 @@ def cli():
     parser.add_argument(
         "--version",
         action="version",
-        version="whisper_subtitles 1.0.1",
+        version="whisper_subtitles 1.0.2",
         help="Print version information",
     )
     args = parser.parse_args()
