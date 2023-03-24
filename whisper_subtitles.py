@@ -12,6 +12,7 @@ import os
 import time
 import whisper
 from pysubs2 import load_from_whisper
+from utils import split_long_lines
 
 
 def main(args):
@@ -69,6 +70,10 @@ def main(args):
                 language=args.language,
                 condition_on_previous_text=args.condition_on_previous_text,
             )
+            # Split long lines into multiple lines
+            for segment in result["segments"]:
+                segment["text"] = split_long_lines(segment["text"])
+
             # Load subtitle file from OpenAI Whisper transcript
             subs = load_from_whisper(result)
             subs.save(subtitle_path)
