@@ -128,6 +128,12 @@ def cli():
         default=False,
         help="Condition on previous text (see Whisper documentation)",
     )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version="whisper_subtitles 1.0.1",
+        help="Print version information",
+    )
     args = parser.parse_args()
     main(args)
 
