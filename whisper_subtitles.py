@@ -69,6 +69,8 @@ def main(args):
                 language=args.language,
                 condition_on_previous_text=args.condition_on_previous_text,
             )
+            # TODO: debugging line
+            print(result)
             with open(
                 os.path.join(args.output_directory, file_name + ".srt"),
                 "w",
@@ -105,7 +107,7 @@ def cli():
     parser.add_argument(
         "--model",
         type=str,
-        default="large",
+        default="base",
         help="Language model to use. Options: tiny, base, small, medium, large",
     )
     parser.add_argument(
