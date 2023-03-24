@@ -1,3 +1,12 @@
+"""
+This is a Python script that utilizes the OpenAI Whisper library to generate
+.srt files with subtitles for compatible files. Before running the script,
+ensure that the required dependencies, namely OpenAI's Whisper, are installed.
+The script generates .srt files for each file found in the directory using
+Whisper. Please note that the generated subtitles may not be completely
+accurate, and manual correction may be necessary.
+"""
+
 import argparse
 import os
 import time
@@ -6,6 +15,10 @@ from utils import write_srt
 
 
 def main(args):
+    """
+    This function is the main function of the script. It loads the language model,
+    searches for files to subtitle, and generates subtitles for each file.
+    """
     model = args.model
     file_array = []
     supported_extensions = [".mp4", ".m4a", ".mp3", ".mpeg", ".mpga", ".wav", ".webm"]
@@ -77,6 +90,9 @@ def main(args):
 
 
 def cli():
+    """
+    This function parses the command line arguments and calls the main function.
+    """
     ws_description = (
         "This is a Python script that utilizes the OpenAI Whisper library to generate"
         " .srt files with subtitles for compatible files. Before running the script,"
