@@ -3,12 +3,11 @@ Utility functions for the subtitle generator.
 """
 
 
-def split_long_lines(text, max_line_length=37):
+def split_long_lines(text, max_line_length=42):
     """
     Split long lines into multiple lines. This is useful for subtitles, where
     long lines can cause problems with display.
-    Default 37 characters based on BBC Subtitle Guidelines:
-    https://www.bbc.co.uk/accessibility/forproducts/guides/subtitles/
+    Default 42 characters
     """
     words = text.split()
     lines = []
