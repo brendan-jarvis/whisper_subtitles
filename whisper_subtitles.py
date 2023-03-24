@@ -71,14 +71,11 @@ def main(args):
                 condition_on_previous_text=args.condition_on_previous_text,
             )
 
-            # Split long lines into multiple lines
-            for segment in result["segments"]:
-                segment["text"] = split_long_lines(
-                    segment["text"], args.max_line_length
-                )
-
             # Load subtitle file from OpenAI Whisper transcript
             subs = load_from_whisper(result)
+            # Split long lines into multiple lines
+            for sub in subs:
+                sub.text = split_long_lines(sub.text, args.max_line_length)
             subs.save(subtitle_path)
 
             end_time = time.time()
