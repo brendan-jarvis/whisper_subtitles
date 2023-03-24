@@ -1,3 +1,7 @@
+"""
+Utilities for the transcript processing transcripts to SRT.
+"""
+
 from typing import Iterator, TextIO
 
 
