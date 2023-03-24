@@ -51,9 +51,9 @@ def main(args):
     total_time = 0
     for file in file_array:
         file_name = os.path.splitext(file)[0]
-        srt_path = os.path.join(args.output_directory, file_name) + ".srt"
-        if os.path.exists(srt_path):
-            print(f"{srt_path} already exists. Skipping...")
+        subtitle_path = os.path.join(args.output_directory, file_name) + args.format
+        if os.path.exists(subtitle_path):
+            print(f"{subtitle_path} already exists. Skipping...")
             continue
 
         print(f"Generating subtitles for {file}...")
@@ -70,7 +70,7 @@ def main(args):
                 condition_on_previous_text=args.condition_on_previous_text,
             )
             subs = create_subtitles(result)
-            subs.save(srt_path)
+            subs.save(subtitle_path, format=args.format)
 
             end_time = time.time()
             subtitle_time = end_time - start_time
@@ -127,6 +127,16 @@ def cli():
         type=bool,
         default=False,
         help="Condition on previous text (see Whisper documentation)",
+    )
+    parser.add_argument(
+        "--format",
+        type=str,
+        default="srt",
+        help=(
+            "Subtitle format. Options: .ass, .srt, .sub, .vtt, and other formats"
+            " supported by pysubs2:"
+            " https://pysubs2.readthedocs.io/en/latest/formats.html"
+        ),
     )
     parser.add_argument(
         "--version",
