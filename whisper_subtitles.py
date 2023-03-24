@@ -11,7 +11,7 @@ import argparse
 import os
 import time
 import whisper
-from utils import write_srt
+from utils import create_subtitles
 
 
 def main(args):
@@ -69,14 +69,8 @@ def main(args):
                 language=args.language,
                 condition_on_previous_text=args.condition_on_previous_text,
             )
-            # TODO: debugging line
-            print(result)
-            with open(
-                os.path.join(args.output_directory, file_name + ".srt"),
-                "w",
-                encoding="utf-8",
-            ) as srt_file:
-                write_srt(result["segments"], srt_file)
+            subs = create_subtitles(result)
+            subs.save(srt_path)
 
             end_time = time.time()
             subtitle_time = end_time - start_time

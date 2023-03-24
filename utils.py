@@ -1,8 +1,7 @@
 """
 Utilities for the transcript processing transcripts to SRT.
 """
-
-from typing import Iterator, TextIO
+import pysubs2
 
 
 def format_timestamp(seconds: float, always_include_hours: bool = False):
@@ -25,18 +24,17 @@ def format_timestamp(seconds: float, always_include_hours: bool = False):
     return f"{hours_marker}{minutes:02d}:{seconds:02d}.{milliseconds:03d}"
 
 
-def write_srt(transcript: Iterator[dict], file: TextIO):
+def create_subtitles(data):
     """
-    Write a transcript to a file in SRT format.
+    This function creates subtitles from the data returned by the model.
     """
-    for i, segment in enumerate(transcript, start=1):
-        print(
-            (
-                f"{i}\n"
-                f"{format_timestamp(segment['start'], always_include_hours=True)} --> "
-                f"{format_timestamp(segment['end'], always_include_hours=True)}\n"
-                f"{segment['text'].strip().replace('-->', '->')}\n"
-            ),
-            file=file,
-            flush=True,
+    subs = pysubs2.SSAFile()
+    for segment in data["segments"]:
+        subs.append(
+            pysubs2.SSAEvent(
+                start=segment["start"] * 1000,
+                end=segment["end"] * 1000,
+                text=segment["text"],
+            )
         )
+    return subs
