@@ -70,9 +70,12 @@ def main(args):
                 language=args.language,
                 condition_on_previous_text=args.condition_on_previous_text,
             )
+
             # Split long lines into multiple lines
             for segment in result["segments"]:
-                segment["text"] = split_long_lines(segment["text"])
+                segment["text"] = split_long_lines(
+                    segment["text"], args.max_line_length
+                )
 
             # Load subtitle file from OpenAI Whisper transcript
             subs = load_from_whisper(result)
@@ -143,6 +146,12 @@ def cli():
             " supported by pysubs2:"
             " https://pysubs2.readthedocs.io/en/latest/formats.html"
         ),
+    )
+    parser.add_argument(
+        "--max_line_length",
+        type=int,
+        default=42,
+        help="Maximum characters per line in the subtitles. Default is 42.",
     )
     parser.add_argument(
         "--version",
