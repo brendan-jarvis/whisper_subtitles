@@ -63,7 +63,7 @@ def main(args):
         # decode the audio and save subtitles
         try:
             start_time = time.time()
-            result = model.transcribe(
+            result: dict = model.transcribe(
                 audio,
                 verbose=True,
                 language=args.language,
