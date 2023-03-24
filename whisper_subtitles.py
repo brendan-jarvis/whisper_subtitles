@@ -11,7 +11,7 @@ import argparse
 import os
 import time
 import whisper
-from utils import create_subtitles
+from pysubs2 import load_from_whisper
 
 
 def main(args):
@@ -60,7 +60,7 @@ def main(args):
 
         audio = whisper.load_audio(os.path.join(args.directory, file))
 
-        # decode the audio and save as .srt
+        # decode the audio and save subtitles
         try:
             start_time = time.time()
             result = model.transcribe(
@@ -69,14 +69,14 @@ def main(args):
                 language=args.language,
                 condition_on_previous_text=args.condition_on_previous_text,
             )
-            subs = create_subtitles(result)
-            subs.save(subtitle_path, format=args.format)
+            subs = load_from_whisper(result)
+            subs.save(subtitle_path)
 
             end_time = time.time()
             subtitle_time = end_time - start_time
             total_time += subtitle_time
             print(
-                f"Subtitles for {file} saved as {file_name}.srt in {subtitle_time:.2f}s"
+                f"Subtitles for {file} saved as {subtitle_path} in {subtitle_time:.2f}s"
             )
         except Exception as transcode_error:
             print(f"Error: {transcode_error}")
