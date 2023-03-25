@@ -1,4 +1,4 @@
-# WhisperSubtitles
+# Whisper Subtitles
 
 This is a Python script that utilizes the OpenAI Whisper library to generate .srt files with subtitles for compatible audio and video files. The script generates .srt files for each file found in the specified directory using Whisper. Please note that the generated subtitles may not be completely accurate, and manual correction may be necessary.
 
@@ -10,13 +10,13 @@ This is a Python script that utilizes the OpenAI Whisper library to generate .sr
 
 ## Installation
 
-To use the WhisperSubtitles Python script, you'll need to create a virtual environment and install the required dependencies. Here's how you can do that:
+To use the Whisper Subtitles Python script, you'll need to create a virtual environment and install the required dependencies. Here's how you can do that:
 
 Clone the repository and navigate into it
 
 ```sh
-git clone https://github.com/brendan-jarvis/whispersubtitles
-cd WhisperSubtitles/
+git clone https://github.com/brendan-jarvis/whisper_subtitles
+cd whisper_subtitles/
 ```
 
 Using either conda or venv create a Python environment. For example, to create a new virtual environment named "venv" using venv, you can run the following command:
@@ -59,7 +59,7 @@ python whisper_subtitles.py
 
 You can also pass in any of the optional arguments listed in the script's usage instructions to customize the behavior of the script.
 
-That's it! You should now be able to use the WhisperSubtitles script to generate subtitles for compatible files.
+That's it! You should now be able to use the Whisper Subtitles script to generate subtitles for compatible files.
 
 ### Tips
 
