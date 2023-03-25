@@ -10,7 +10,7 @@ import os
 import subprocess
 
 
-def whisper_cpp(file_array, args):
+def transcribe(file_array, args):
     """
     Takes an array of files, converts them to .wav 16khz and runs whisper.cpp.
     """
