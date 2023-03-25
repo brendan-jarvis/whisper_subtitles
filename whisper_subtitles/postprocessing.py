@@ -1,7 +1,6 @@
 """
 Utility functions for the subtitle generator.
 """
-import pysubs2
 
 
 def split_long_lines(text, max_line_length=42):
