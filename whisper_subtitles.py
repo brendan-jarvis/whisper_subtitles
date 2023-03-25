@@ -69,6 +69,7 @@ def main(args):
                 verbose=True,
                 language=args.language,
                 condition_on_previous_text=args.condition_on_previous_text,
+                word_timestamps=True,
             )
 
             # Load subtitle file from OpenAI Whisper transcript
@@ -137,7 +138,7 @@ def cli():
     parser.add_argument(
         "--format",
         type=str,
-        default="srt",
+        default=".srt",
         help=(
             "Subtitle format. Options: .ass, .srt, .sub, .vtt, and other formats"
             " supported by pysubs2:"
