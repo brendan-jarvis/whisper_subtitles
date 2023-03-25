@@ -43,6 +43,7 @@ def transcribe(file_array, args):
     subprocess.run(
         [
             "./main",
+            f"--model={args.model}",
             "-f",
             "temp/*.wav",
             "--split_on_word=False",
