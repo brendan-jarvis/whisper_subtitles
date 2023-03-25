@@ -11,7 +11,7 @@ import argparse
 import os
 import time
 import whisper
-from pysubs2 import load_from_whisper
+from pysubs2 import load_from_whisper, exceptions
 from utils import split_long_lines
 
 
@@ -30,9 +30,9 @@ def main(args):
         print(f"Loading the {model} language model...")
         model = whisper.load_model(model)
         if not model:
-            raise Exception("Failed to load model")
-    except Exception as model_error:
-        print(f"Error: {model_error}")
+            raise RuntimeError("Failed to load model")
+    except RuntimeError as model_error:
+        print(f"RuntimeError loading the model: {model_error}")
         return
 
     print("Searching for files to subtitle...")
@@ -42,9 +42,9 @@ def main(args):
             if file.endswith(tuple(supported_extensions)):
                 file_array.append(file)
         if len(file_array) == 0:
-            raise Exception("No files found")
-    except Exception as file_error:
-        print(f"Error: {file_error}")
+            raise FileNotFoundError("No supported files found in the directory")
+    except FileNotFoundError as file_error:
+        print(f"FileNotFoundError: {file_error}")
         return
 
     print(f"Found {len(file_array)} files to subtitle.")
@@ -72,12 +72,19 @@ def main(args):
                 word_timestamps=True,
             )
 
-            # Load subtitle file from OpenAI Whisper transcript
-            subs = load_from_whisper(result)
-            # Split long lines into multiple lines
-            for sub in subs:
-                sub.text = split_long_lines(sub.text, args.max_line_length)
-            subs.save(subtitle_path)
+            try:
+                # Load subtitle file from OpenAI Whisper transcript
+                subs = load_from_whisper(result)
+                # Split long lines into multiple lines
+                for sub in subs:
+                    sub.text = split_long_lines(sub.text, args.max_line_length)
+                # Remove miscellaneous events
+                subs.remove_miscellaneous_events()
+                subs.save(subtitle_path)
+
+            except exceptions.Pysubs2Error as pysubs2_error:
+                print(f"Error while running pysubs2: {pysubs2_error}")
+                continue
 
             end_time = time.time()
             subtitle_time = end_time - start_time
@@ -85,8 +92,11 @@ def main(args):
             print(
                 f"Subtitles for {file} saved as {subtitle_path} in {subtitle_time:.2f}s"
             )
-        except Exception as transcode_error:
-            print(f"Error: {transcode_error}")
+        except FileNotFoundError as audio_error:
+            print(f"FileNotFoundError: {audio_error}")
+            continue
+        except RuntimeError as transcode_error:
+            print(f"RuntimeError: {transcode_error}")
             continue
 
     print(f"Generated subtitles for {len(file_array)} files in {total_time:.2f}s")
