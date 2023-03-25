@@ -43,7 +43,16 @@ Once your virtual environment is activated, you can install the required depende
 pip install -r requirements.txt
 ```
 
-This command will install all the necessary dependencies for the script to run, including OpenAI's Whisper library and its dependencies.
+This command will install all the Python dependencies, including OpenAI's Whisper library and its dependencies.
+
+### Whisper.cpp dependencies
+
+Whisper.cpp usage requires [ffmpeg](https://ffmpeg.org/download.html), to convert input to 16-bit WAV files:
+
+```sh
+sudo apt update
+sudo apt install ffmpeg
+```
 
 Whisper requires Python3.7+ and a recent version of PyTorch (I used PyTorch 1.13.1):
 

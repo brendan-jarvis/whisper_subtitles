@@ -1,3 +1,2 @@
 openai-whisper
 pysubs2
-ffmpeg
