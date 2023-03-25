@@ -3,7 +3,7 @@ This module contains the command line interface for the whisper_subtitles packag
 """
 
 import argparse
-from src.whisper_subtitles import generate_subtitles
+from whisper_subtitles.main import generate_subtitles
 
 
 def cli():
@@ -20,36 +20,42 @@ def cli():
     )
     parser = argparse.ArgumentParser(description=ws_description)
     parser.add_argument(
+        "-m",
         "--model",
         type=str,
         default="base",
         help="Language model to use. Options: tiny, base, small, medium, large",
     )
     parser.add_argument(
+        "-i",
         "--input_directory",
         type=str,
         default=".",
         help="Directory containing files to subtitle",
     )
     parser.add_argument(
+        "-o",
         "--output_directory",
         type=str,
         default=".",
         help="Directory to save subtitle files",
     )
     parser.add_argument(
+        "-l",
         "--language",
         type=str,
         default="en",
         help="Language to use (see Whisper documentation for options)",
     )
     parser.add_argument(
+        "-c",
         "--condition_on_previous_text",
         type=bool,
         default=False,
         help="Condition on previous text (see Whisper documentation)",
     )
     parser.add_argument(
+        "-f",
         "--subtitle_format",
         type=str,
         default=".srt",
@@ -60,12 +66,14 @@ def cli():
         ),
     )
     parser.add_argument(
+        "-ml",
         "--max_line_length",
         type=int,
         default=42,
         help="Maximum characters per line in the subtitles. Default is 42.",
     )
     parser.add_argument(
+        "-v",
         "--version",
         action="version",
         version="whisper_subtitles 1.0.2",
