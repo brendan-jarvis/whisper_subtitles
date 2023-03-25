@@ -1,3 +1,5 @@
-"""Initial documentation of whisper_subtitles."""
+"""
+This is a Python package.
+"""
 
-__version__ = '1.0.0'
+__version__ = "1.0.0"
