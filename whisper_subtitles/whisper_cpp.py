@@ -10,7 +10,7 @@ import os
 import subprocess
 
 
-def whisper_cpp(file_array):
+def whisper_cpp(file_array, args):
     """
     Takes an array of files, converts them to .wav 16khz and runs whisper.cpp.
     """
@@ -40,7 +40,17 @@ def whisper_cpp(file_array):
             check=True,
         )
 
-    subprocess.run(["./main", "-f", "temp/*.wav"], check=True)
+    subprocess.run(
+        [
+            "./main",
+            "-f",
+            "temp/*.wav",
+            "--split_on_word=False",
+            f"--max_len={args.max_line_length}",
+            f"--output={args.subtitle_format.replace('.', '-')}",
+        ],
+        check=True,
+    )
 
     # Delete the temp directory
     subprocess.run(["rm", "-rf", "temp"], check=True)
