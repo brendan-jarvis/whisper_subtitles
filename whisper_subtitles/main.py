@@ -26,6 +26,7 @@ def generate_subtitles(
     condition_on_previous_text,
     subtitle_format,
     max_line_length,
+    fp16,
 ):
     """
     This function is the main function of the script. It loads the language model,
@@ -79,6 +80,7 @@ def generate_subtitles(
                 language=language,
                 condition_on_previous_text=condition_on_previous_text,
                 word_timestamps=True,
+                fp16=fp16,
             )
 
             try:

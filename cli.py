@@ -79,6 +79,13 @@ def cli():
         version="whisper_subtitles 1.0.2",
         help="Print version information",
     )
+    parser.add_argument(
+        "-fp16",
+        "--fp16",
+        type=bool,
+        default=True,
+        help="Use fp16 for inference",
+    )
     args = parser.parse_args()
     generate_subtitles(
         args.model,
@@ -88,6 +95,7 @@ def cli():
         args.condition_on_previous_text,
         args.subtitle_format,
         args.max_line_length,
+        args.fp16,
     )
 
 

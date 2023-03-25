@@ -18,6 +18,7 @@ def test_generate_subtitles():
             output_directory=tmpdir,
             condition_on_previous_text=False,
             max_line_length=42,
+            fp16=False,
         )
         # Compare the output SRT file to the expected SRT file
         assert filecmp.cmp(
