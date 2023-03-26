@@ -87,9 +87,9 @@ def cli():
         help="Use fp16 for inference",
     )
     parser.add_argument(
-        "use_cpp",
+        "--use_cpp",
         type=bool,
-        default=False,
+        default=True,
         help="Use Whisper.CPP for inference",
     )
     args = parser.parse_args()
