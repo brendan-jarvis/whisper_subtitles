@@ -1,10 +1,11 @@
 """
-This is a Python script that utilizes the OpenAI Whisper library to generate
-.srt files with subtitles for compatible files. Before running the script,
-ensure that the required dependencies, namely OpenAI's Whisper, are installed.
+This is a Python script that utilizes the OpenAI Whisper and ggerganov 
+whisper.cpp libraries to generate .srt files with subtitles for compatible files. 
 The script generates .srt files for each file found in the directory using
-Whisper. Please note that the generated subtitles may not be completely
-accurate, and manual correction may be necessary.
+Whisper or Whisper.cpp - based on CUDA detection or where '--use_cpp True' forces 
+CPU transcription. 
+Please note that the generated subtitles may not be completely accurate, 
+and manual correction may be necessary.
 """
 
 
@@ -38,11 +39,11 @@ def generate_subtitles(args):
     print(f"Found {len(file_array)} files to subtitle.")
 
     if args.use_cpp:
-        print("Using Whisper.CPP")
+        print("Using Whisper.CPP (CPU)")
         transcribe_with_cpp(file_array, args)
-    if cuda.is_available():
-        print("Using GPU")
+    if cuda.is_available() or args.fp16 is False:
+        print("Using OpenAI Whisper (GPU)")
         transcribe_with_whisper(file_array, args)
     else:
-        print("Using CPU")
+        print("Using Whisper.CPP (CPU)")
         transcribe_with_cpp(file_array, args)
