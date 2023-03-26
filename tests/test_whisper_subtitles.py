@@ -5,9 +5,9 @@ import argparse
 from whisper_subtitles.main import generate_subtitles
 
 
-def test_generate_subtitles():
+def test_openai_subtitles():
     """
-    This function tests the generate_subtitles function.
+    Tests the open AI transcription.
     """
     with tempfile.TemporaryDirectory() as tmpdir:
         # Generate subtitles using the OpenAI Whisper
@@ -29,6 +29,12 @@ def test_generate_subtitles():
             os.path.join(tmpdir, "test0.srt"),
             shallow=False,
         )
+
+
+def test_whisper_cpp():
+    """
+    Tests the whisper.cpp transcription.
+    """
     with tempfile.TemporaryDirectory() as tmpdir:
         # Generate subtitles using Whisper.cpp
         mock_args = argparse.Namespace(
