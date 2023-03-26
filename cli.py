@@ -86,17 +86,14 @@ def cli():
         default=True,
         help="Use fp16 for inference",
     )
-    args = parser.parse_args()
-    generate_subtitles(
-        args.model,
-        args.input_directory,
-        args.output_directory,
-        args.language,
-        args.condition_on_previous_text,
-        args.subtitle_format,
-        args.max_line_length,
-        args.fp16,
+    parser.add_argument(
+        "use_cpp",
+        type=bool,
+        default=False,
+        help="Use Whisper.CPP for inference",
     )
+    args = parser.parse_args()
+    generate_subtitles(args)
 
 
 if __name__ == "__main__":
