@@ -59,11 +59,10 @@ def transcribe_with_cpp(file_array, args):
             print(f"\nRunning Whisper.cpp on /{output_file_name}.wav\n")
 
             # Run whisper.cpp on the .wav file
-            os.chdir("whisper.cpp")
             subprocess.run(
                 [
-                    "./main",
-                    f"--model models/ggml-{args.model}.bin",
+                    "whisper.cpp/main",
+                    f"--model whisper.cpp/models/ggml-{args.model}.bin",
                     "-f",
                     f"{temp_dir}/{output_file_name}.wav",
                     "-sow False",
@@ -72,5 +71,3 @@ def transcribe_with_cpp(file_array, args):
                 ],
                 check=True,
             )
-
-    os.chdir(current_dir)
