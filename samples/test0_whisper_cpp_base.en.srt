@@ -1,0 +1,126 @@
+1
+00:00:03,760 --> 00:00:06,920
+What exactly is artificial intelligence?
+
+2
+00:00:08,200 --> 00:00:13,740
+We speak of AI when computer systems
+perform tasks that usually require human
+intelligence.
+
+3
+00:00:14,720 --> 00:00:20,220
+This includes, for example, recognising
+images, making decisions or engaging in
+dialogue.
+
+4
+00:00:21,460 --> 00:00:25,340
+To do this, the AI systems must be
+equipped with knowledge and experience.
+
+5
+00:00:26,320 --> 00:00:28,100
+This can be achieved in two ways.
+
+6
+00:00:29,460 --> 00:00:35,400
+You can program each individual
+instruction so that the machine solves the
+task step by step.
+
+7
+00:00:36,220 --> 00:00:39,580
+This is comparable to a cooking recipe or
+assembly instructions.
+
+8
+00:00:40,440 --> 00:00:44,140
+Alternatively, you can use programs that
+learn from data themselves.
+
+9
+00:00:44,960 --> 00:00:49,960
+This enables them to detect relevant
+information, draw conclusions, or make
+predictions.
+
+10
+00:00:51,220 --> 00:00:53,220
+This is known as machine learning.
+
+11
+00:00:54,560 --> 00:00:58,460
+We all have probably dealt with AI at some
+point in our lives.
+
+12
+00:00:59,060 --> 00:01:05,220
+When we watch films, listen to music or
+shop online, AI gives us recommendations
+about what we might like.
+
+13
+00:01:05,680 --> 00:01:12,940
+AI is capable of converting spoken
+language into text and translating it into
+other languages.
+
+14
+00:01:16,500 --> 00:01:24,440
+AI is a central component of robotics.
+Robots make our everyday lives easier or
+take on strenuous activities.
+
+15
+00:01:25,620 --> 00:01:31,000
+Self-driving vehicles recognise their
+environment through AI and can react to
+it.
+
+16
+00:01:31,680 --> 00:01:35,180
+AI is becoming increasingly important
+within medicine.
+
+17
+00:01:35,820 --> 00:01:38,100
+It supports doctors when diagnosing
+diseases.
+
+18
+00:01:41,900 --> 00:01:46,500
+Also, more and more patients use AI-based
+apps for initial diagnosis.
+
+19
+00:01:48,060 --> 00:01:55,080
+In the educational sector, AI helps to
+individualise learning activities, for
+example, on digital learning platforms.
+
+20
+00:01:55,900 --> 00:01:58,600
+AI is becoming increasingly important.
+
+21
+00:01:59,360 --> 00:02:06,380
+Once we understand how AI works, we can
+better gauge where it can support everyday
+activities at home and at work.
+
+22
+00:02:06,600 --> 00:02:08,780
+And where we would rather make our own
+decisions.
+
+23
+00:02:09,860 --> 00:02:14,660
+AI will not replace humans, but it is
+getting better and better at supporting
+us.
+
+24
+00:02:15,260 --> 00:02:18,120
+For this, we need an AI-competent society.
+
