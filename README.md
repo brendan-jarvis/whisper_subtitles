@@ -95,7 +95,7 @@ Before running the script, ensure that the required dependencies, namely OpenAI'
 To run the script, use the following command:
 
 ```sh
-python whisper_subtitles [-h] [-m MODEL] [-i INPUT_DIRECTORY] [-o OUTPUT_DIRECTORY] [-l LANGUAGE] [-c CONDITION_ON_PREVIOUS_TEXT] [-f SUBTITLE_FORMAT] [-ml MAX_LINE_LENGTH] [-v] [-fp16 FP16] [--use_cpp USE_CPP]
+whisper_subtitles [-h] [-m MODEL] [-i INPUT_DIRECTORY] [-o OUTPUT_DIRECTORY] [-l LANGUAGE] [-c CONDITION_ON_PREVIOUS_TEXT] [-f SUBTITLE_FORMAT] [-ml MAX_LINE_LENGTH] [-v] [-fp16 FP16] [--use_cpp USE_CPP]
 ```
 
 The script accepts the following optional arguments:
