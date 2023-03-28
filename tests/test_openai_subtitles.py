@@ -4,22 +4,22 @@ import argparse
 from whisper_subtitles.main import generate_subtitles
 
 
-def test_whisper_cpp():
+def test_openai_subtitles():
     """
-    Tests the whisper.cpp transcription.
+    Tests the open AI transcription.
     """
     with tempfile.TemporaryDirectory() as tmpdir:
-        # Generate subtitles using Whisper.cpp
+        # Generate subtitles using the OpenAI Whisper
         mock_args = argparse.Namespace(
-            model="base.en",
+            model="base",
             language="en",
             input_directory="samples/",
             subtitle_format=".srt",
             output_directory=tmpdir,
             condition_on_previous_text=False,
             max_line_length=42,
-            use_cpp=True,  # Will use whisper.cpp
-            fp16=True,
+            use_cpp=False,  # Won't use whisper.cpp
+            fp16=False,  # Avoid FP32 warning
         )
         generate_subtitles(mock_args)
         # It generates the subtitle files
