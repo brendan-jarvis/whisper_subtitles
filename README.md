@@ -95,17 +95,20 @@ Before running the script, ensure that the required dependencies, namely OpenAI'
 To run the script, use the following command:
 
 ```sh
-python whisper_subtitles.py [-h] [--model MODEL] [--directory DIRECTORY] [--output_directory OUTPUT_DIRECTORY]
-[--language LANGUAGE] [--condition_on_previous_text CONDITION_ON_PREVIOUS_TEXT]
+python whisper_subtitles [-h] [-m MODEL] [-i INPUT_DIRECTORY] [-o OUTPUT_DIRECTORY] [-l LANGUAGE] [-c CONDITION_ON_PREVIOUS_TEXT] [-f SUBTITLE_FORMAT] [-ml MAX_LINE_LENGTH] [-v] [-fp16 FP16] [--use_cpp USE_CPP]
 ```
 
 The script accepts the following optional arguments:
 
-- **--model**: Language model to use. Options: tiny, base, small, medium, large
-- **--directory**: Directory containing files to subtitle
-- **--output_directory**: Directory to save subtitle files
-- **--language**: Language to use (see Whisper documentation for options)
-- **--condition_on_previous_text**: Condition on previous text (see Whisper documentation)
+- **-m** **--model**: Language model to use. Options: tiny, base, small, medium, large.
+- **-i** **--input_directory**: Directory containing files to subtitle.
+- **-o** **--output_directory**: Directory to save subtitle files.
+- **-l** **--language**: Language to use (see Whisper documentation for options).
+- **-c** **--condition_on_previous_text**: Condition on previous text (see Whisper documentation).
+- **-ml** **--max_line_length**: Maximum characters per line in the subtitles. Default is 42.
+- **-v** **--version**: Print version information.
+- **-fp16** **--fp16**: Use FP16 for inference.
+- **--use_cpp**: Force the use of Whisper.CPP for transcription.
 
 For example, to generate subtitles for all files in the current directory using the large language model and save the subtitles in the subtitles directory, run:
 
