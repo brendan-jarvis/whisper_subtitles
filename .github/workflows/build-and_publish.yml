@@ -31,5 +31,6 @@ jobs:
           files: |
             dist/*.tar.gz
             dist/*.whl
+          tag_name: ${{ github.ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
