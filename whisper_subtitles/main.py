@@ -100,7 +100,7 @@ def cli():
         "--use_cpp",
         type=bool,
         default=True,
-        help="Use Whisper.CPP for inference",
+        help="Use Whisper.CPP for transcription",
     )
     args = parser.parse_args()
     generate_subtitles(args)
