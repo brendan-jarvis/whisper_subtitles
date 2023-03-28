@@ -28,12 +28,17 @@ jobs:
       - name: Build package
         run: python setup.py sdist bdist_wheel
 
+      - name: Read version number
+        id: version
+        run: |
+          echo "::set-output name=number::$(python -c 'from whisper_subtitles.version import __version__; print(__version__)')"
+
       - name: Publish release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             dist/*.tar.gz
             dist/*.whl
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ steps.version.outputs.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

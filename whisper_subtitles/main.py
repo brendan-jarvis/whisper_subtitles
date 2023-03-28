@@ -14,6 +14,7 @@ import argparse
 from torch import cuda
 from .whisper_cpp import transcribe_with_cpp
 from .openai import transcribe_with_whisper
+from .version import __version__ as version
 
 
 def cli():
@@ -86,7 +87,7 @@ def cli():
         "-v",
         "--version",
         action="version",
-        version="whisper_subtitles 1.0.2",
+        version=f"whisper_subtitles {version}",
         help="Print version information",
     )
     parser.add_argument(
