@@ -45,6 +45,24 @@ pip install -r requirements.txt
 
 This command will install all the Python dependencies, including OpenAI's Whisper library and its dependencies.
 
+```sh
+python setup.py sdist
+```
+
+Create a source distribution directory and archive file of Whisper Subtitles in dist/
+
+```sh
+pip install dist/whisper_subtitles-0.1.tar.gz
+```
+
+Install the whisper_subtitles package from the source distribution archive file located in the dist directory.
+
+```sh
+python whisper_subtitles --version
+```
+
+Confirm the package has installed, should output: `whisper_subtitles 1.0.2`
+
 ### Whisper.cpp dependencies
 
 Whisper.cpp usage requires [ffmpeg](https://ffmpeg.org/download.html), to convert input to 16-bit WAV files:
@@ -59,12 +77,6 @@ Whisper requires Python3.7+ and a recent version of PyTorch (I used PyTorch 1.13
 - [Python](https://www.python.org/downloads/?ref=news-tutorials-ai-research) and
 - [PyTorch](https://pytorch.org/get-started/locally/?ref=news-tutorials-ai-research), also
 - [CUDA](https://developer.nvidia.com/cuda-downloads)
-
-Finally, you can run the whisper_subtitles.py script by running the following command:
-
-```sh
-python whisper_subtitles.py
-```
 
 You can also pass in any of the optional arguments listed in the script's usage instructions to customize the behavior of the script.
 
