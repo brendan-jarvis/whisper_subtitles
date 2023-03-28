@@ -1,56 +1,103 @@
-"""
-Checks if whisper.cpp exists in the current directory. If it doesn't, it clones the 
-repository and builds it using make. Then, it creates a temp directory and 
-converts all files in filesArr to 16-bit WAV format using ffmpeg, saving 
-the converted files in the temp directory. Finally, it runs whisper.cpp on 
-all .wav files in the temp directory.
-"""
-
 import os
 import subprocess
+import tempfile
 
 
-def whisper_cpp(file_array, args):
+def transcribe_with_cpp(file_array, args):
     """
-    Takes an array of files, converts them to .wav 16khz and runs whisper.cpp.
+    Takes an array of files, converts them to .wav 16khz (if necessary), and runs whisper.cpp.
     """
+    current_dir = os.getcwd()
     if not os.path.exists("whisper.cpp"):
         subprocess.run(
             ["git", "clone", "https://github.com/ggerganov/whisper.cpp.git"], check=True
         )
         os.chdir("whisper.cpp")
         subprocess.run(["make"], check=True)
+        os.chdir(current_dir)
 
-    os.makedirs("temp", exist_ok=True)
-    for file in file_array:
-        # Convert file to 16-bit WAV format and save it in the temp directory
+    # Check if the model exists
+    if not os.path.exists(f"whisper.cpp/models/ggml-{args.model}.bin"):
+        print(f"Model {args.model} does not exist. Downloading...")
         subprocess.run(
-            [
-                "ffmpeg",
-                "-i",
-                file,
-                "-ar",
-                "16000",
-                "-ac",
-                "1",
-                "-c:a",
-                "pcm_s16le",
-                f"temp/{os.path.basename(file)}.wav",
-            ],
+            ["bash", "whisper.cpp/models/download-ggml-model.sh", f"{args.model}"],
             check=True,
         )
+        return
 
-    subprocess.run(
-        [
-            "./main",
-            "-f",
-            "temp/*.wav",
-            "--split_on_word=False",
-            f"--max_len={args.max_line_length}",
-            f"--output={args.subtitle_format.replace('.', '-')}",
-        ],
-        check=True,
-    )
+    # Create a temp directory
+    with tempfile.TemporaryDirectory() as temp_dir:
+        for file in file_array:
+            # Check encoding of file is 16-bit using ffprobe
+            encoding = subprocess.run(
+                [
+                    "ffprobe",
+                    "-v",
+                    "error",
+                    "-show_entries",
+                    "stream=bits_per_sample",
+                    "-of",
+                    "default=noprint_wrappers=1:nokey=1",
+                    f"{args.input_directory}{file}",
+                ],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+            )
+            encoding = encoding.stdout.decode("utf-8").strip()
 
-    # Delete the temp directory
-    subprocess.run(["rm", "-rf", "temp"], check=True)
+            if encoding == "16" and file.endswith(".wav"):
+                # If file is already 16-bit WAV format, copy it to the temp directory
+                print(f"\nCopying {file} to {temp_dir}\n")
+                subprocess.run(
+                    [
+                        "cp",
+                        f"{args.input_directory}{file}",
+                        f"{temp_dir}/{os.path.splitext(os.path.basename(file))[0]}.wav",
+                    ],
+                    check=True,
+                )
+            else:
+                # Otherwise convert file to 16-bit WAV format and save it in the temp directory
+                output_file_name = os.path.splitext(os.path.basename(file))[0]
+                print(
+                    f"In {os.getcwd()} converting {args.input_directory}{file} to"
+                    " 16-bit WAV format...\n"
+                )
+                print(f"\nConverting {file} to 16-bit WAV format...\n")
+                subprocess.run(
+                    [
+                        "ffmpeg",
+                        "-i",
+                        f"{args.input_directory}{file}",
+                        "-ar",
+                        "16000",
+                        "-ac",
+                        "1",
+                        "-c:a",
+                        "pcm_s16le",
+                        f"{temp_dir}/{output_file_name}.wav",
+                    ],
+                    check=True,
+                )
+
+                print(
+                    f"\nConverted {output_file_name} to 16-bit WAV format and saved it"
+                    f" in {temp_dir}\n"
+                )
+
+            print(f"\nRunning Whisper.cpp on /{output_file_name}.wav\n")
+
+            # Run whisper.cpp on the 16-bit .wav file
+            subprocess.run(
+                [
+                    "whisper.cpp/main",
+                    f"--model whisper.cpp/models/ggml-{args.model}.bin",
+                    "-f",
+                    f"{temp_dir}/{output_file_name}.wav",
+                    "-sow False",
+                    f"-ml {args.max_line_length}",
+                    f"--output-{args.subtitle_format.replace('.', '')}",
+                ],
+                check=True,
+            )
