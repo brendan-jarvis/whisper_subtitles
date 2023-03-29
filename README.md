@@ -110,8 +110,8 @@ The script accepts the following optional arguments:
 - **-fp16** **--fp16**: Use FP16 for inference.
 - **--use_cpp**: Force the use of Whisper.CPP for transcription.
 
-For example, to generate subtitles for all files in the current directory using the large language model and save the subtitles in the subtitles directory, run:
+For example, to generate subtitles for all files in the current directory using the medium.en language model and save the subtitles in the subtitles directory, run:
 
 ```
-python whisper_subtitles.py --model medium.en --language en
+whisper_subtitles -m medium.en -l en
 ```
