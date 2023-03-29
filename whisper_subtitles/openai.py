@@ -13,22 +13,27 @@ def transcribe_with_whisper(file_array, args):
     Transcribes audio files using OpenAI's Whisper.
     """
     try:
-        print(f"Loading the {args.model} language model...")
+        print(f"Loading the {args.model} language model...\n")
         model = whisper.load_model(args.model)
         if not model:
-            raise RuntimeError("Failed to load model")
+            raise RuntimeError("Failed to load model!")
     except RuntimeError as model_error:
-        print(f"RuntimeError loading the model: {model_error}")
+        print(f"RuntimeError loading the model: {model_error}!")
         return
 
     total_time = 0
+    total_transcribed = 0
     for file in file_array:
-        file_name = os.path.splitext(file)[0]
+        file_name = os.path.splitext(os.path.basename(file))[0]
         subtitle_path = (
             os.path.join(args.output_directory, file_name) + args.subtitle_format
         )
+        print(f"Transcribing {file} to {subtitle_path}\n")
         if os.path.exists(subtitle_path):
-            print(f"{subtitle_path} already exists. Skipping...")
+            print(
+                "Skipping transcription as there are already subtitles at"
+                f" {subtitle_path}\n"
+            )
             continue
 
         print(f"Generating subtitles for {file}...")
@@ -70,6 +75,7 @@ def transcribe_with_whisper(file_array, args):
             end_time = time.time()
             subtitle_time = end_time - start_time
             total_time += subtitle_time
+            total_transcribed += 1
             print(
                 f"Subtitles for {file} saved as {subtitle_path} in {subtitle_time:.2f}s"
             )
@@ -80,4 +86,4 @@ def transcribe_with_whisper(file_array, args):
             print(f"RuntimeError: {transcode_error}")
             continue
 
-    print(f"Generated subtitles for {len(file_array)} files in {total_time:.2f}s")
+    print(f"Generated subtitles for {total_transcribed} files in {total_time:.2f}s")
