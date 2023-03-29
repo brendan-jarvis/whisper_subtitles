@@ -33,7 +33,11 @@ def transcribe_with_whisper(file_array, args):
 
         print(f"Generating subtitles for {file}...")
 
-        audio = whisper.load_audio(os.path.join(args.input_directory, file))
+        # load the audio
+        if os.path.isfile(args.input_directory):
+            audio = whisper.load_audio(args.input_directory)
+        else:
+            audio = whisper.load_audio(os.path.join(args.input_directory, file))
 
         # decode the audio and save subtitles
         try:
