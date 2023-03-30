@@ -20,6 +20,7 @@ def test_whisper_cpp():
             max_line_length=42,
             use_cpp=True,  # Will use whisper.cpp
             fp16=True,
+            use_gpu=False,  # Won't use GPU
         )
         generate_subtitles(mock_args)
         # It generates the subtitle files
