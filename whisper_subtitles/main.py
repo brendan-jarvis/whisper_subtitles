@@ -98,10 +98,18 @@ def cli():
         help="Use fp16 for inference",
     )
     parser.add_argument(
+        "-cpp",
         "--use_cpp",
         type=bool,
         default=False,
         help="Use Whisper.CPP for transcription",
+    )
+    parser.add_argument(
+        "-g",
+        "--use_gpu",
+        type=bool,
+        default=False,
+        help="Force use of Whisper (GPU) for transcription",
     )
     args = parser.parse_args()
     generate_subtitles(args)
@@ -155,7 +163,7 @@ def generate_subtitles(args):
     if args.use_cpp:
         print("--use_cpp=True. Using Whisper.CPP (CPU).\n")
         transcribe_with_cpp(file_array, args)
-    elif cuda.is_available():
+    elif cuda.is_available() or args.use_gpu:
         print("CUDA is available. Using OpenAI Whisper (GPU).\n")
         transcribe_with_whisper(file_array, args)
     elif args.fp16 is False:
