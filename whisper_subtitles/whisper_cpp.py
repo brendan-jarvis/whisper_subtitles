@@ -7,14 +7,12 @@ def transcribe_with_cpp(file_array, args):
     """
     Takes an array of files, converts them to .wav 16khz (if necessary), and runs whisper.cpp.
     """
-    current_dir = os.getcwd()
+    # Check if whisper.cpp exists
     if not os.path.exists("whisper.cpp"):
         subprocess.run(
             ["git", "clone", "https://github.com/ggerganov/whisper.cpp.git"], check=True
         )
-        os.chdir("whisper.cpp")
-        subprocess.run(["make"], check=True)
-        os.chdir(current_dir)
+        subprocess.run(["make"], check=True, cwd="whisper.cpp")
 
     # Check if the model exists
     if not os.path.exists(f"whisper.cpp/models/ggml-{args.model}.bin"):
@@ -92,12 +90,20 @@ def transcribe_with_cpp(file_array, args):
             subprocess.run(
                 [
                     "whisper.cpp/main",
-                    f"--model whisper.cpp/models/ggml-{args.model}.bin",
                     "-f",
                     f"{temp_dir}/{output_file_name}.wav",
-                    "-sow False",
-                    f"-ml {args.max_line_length}",
+                    "-m",
+                    f"whisper.cpp/models/ggml-{args.model}.bin",
+                    "--max-len",
+                    f"{args.max_line_length}",
                     f"--output-{args.subtitle_format.replace('.', '')}",
+                    "-of",
+                    f"{args.output_directory}/{output_file_name}",
                 ],
                 check=True,
+            )
+
+            print(
+                "Saved to "
+                f" \n{args.output_directory}/{output_file_name}{args.subtitle_format}\n"
             )
