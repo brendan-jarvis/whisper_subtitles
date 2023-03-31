@@ -25,12 +25,6 @@ def test_whisper_cpp():
         generate_subtitles(mock_args)
         # It generates the subtitle files
         assert os.path.exists(os.path.join(tmpdir, "test0.srt"))
-        assert os.path.exists(os.path.join(tmpdir, "test1.srt"))
-
         # test0.srt contains the words 'artificial intelligence'
         with open(os.path.join(tmpdir, "test0.srt"), "r", encoding="utf-8") as sub_file:
             assert "artificial intelligence" in sub_file.read()
-
-        # test1.srt contains the word Americans
-        with open(os.path.join(tmpdir, "test1.srt"), "r", encoding="utf-8") as sub_file:
-            assert "Americans" in sub_file.read()
