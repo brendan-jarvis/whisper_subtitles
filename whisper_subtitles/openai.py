@@ -56,12 +56,14 @@ def transcribe_with_whisper(file_array, args):
                 fp16=args.fp16,
             )
 
+            # Send result to split_long_lines
+            print("Result: ", result)
+
+            result = split_long_lines(result)
+
             try:
                 # Load subtitle file from OpenAI Whisper transcript
                 subs = load_from_whisper(result)
-                # Split long lines into multiple lines
-                for sub in subs:
-                    sub.text = split_long_lines(sub.text, args.max_line_length)
                 # Remove miscellaneous events
                 subs.remove_miscellaneous_events()
                 # Fix overlapping display times
