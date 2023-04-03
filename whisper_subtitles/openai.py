@@ -56,9 +56,6 @@ def transcribe_with_whisper(file_array, args):
                 fp16=args.fp16,
             )
 
-            # Send result to split_long_lines
-            print("Result: ", result)
-
             result = split_long_lines(result)
 
             try:
