@@ -77,11 +77,18 @@ def cli():
         ),
     )
     parser.add_argument(
-        "-ml",
-        "--max_line_length",
+        "-cl",
+        "--char_limit",
         type=int,
         default=42,
         help="Maximum characters per line in the subtitles. Default is 42.",
+    )
+    parser.add_argument(
+        "-ml",
+        "--max_lines",
+        type=int,
+        default=2,
+        help="Maximum lines per subtitle event. Default is 2.",
     )
     parser.add_argument(
         "-v",
