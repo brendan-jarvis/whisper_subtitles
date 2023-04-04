@@ -77,11 +77,18 @@ def cli():
         ),
     )
     parser.add_argument(
-        "-ml",
-        "--max_line_length",
+        "-cl",
+        "--char_limit",
         type=int,
         default=42,
         help="Maximum characters per line in the subtitles. Default is 42.",
+    )
+    parser.add_argument(
+        "-ml",
+        "--max_lines",
+        type=int,
+        default=2,
+        help="Maximum lines per subtitle event. Default is 2.",
     )
     parser.add_argument(
         "-v",
@@ -98,10 +105,18 @@ def cli():
         help="Use fp16 for inference",
     )
     parser.add_argument(
+        "-cpp",
         "--use_cpp",
         type=bool,
-        default=True,
+        default=False,
         help="Use Whisper.CPP for transcription",
+    )
+    parser.add_argument(
+        "-g",
+        "--use_gpu",
+        type=bool,
+        default=False,
+        help="Force use of Whisper (GPU) for transcription",
     )
     args = parser.parse_args()
     generate_subtitles(args)
@@ -113,31 +128,56 @@ def generate_subtitles(args):
     searches for files to subtitle, and generates subtitles for each file.
     """
     file_array = []
-    supported_extensions = [".mp4", ".m4a", ".mp3", ".mpeg", ".mpga", ".wav", ".webm"]
+    supported_extensions = [
+        ".mp4",
+        ".mkv",
+        ".m4a",
+        ".mp3",
+        ".mpeg",
+        ".mpga",
+        ".wav",
+        ".webm",
+    ]
 
-    print("Whisper Subtitles script loaded")
+    print("Whisper Subtitles script loaded\n")
 
-    print("Searching for files to subtitle...")
+    print("Searching for files to subtitle...\n")
+
     try:
-        for file in os.listdir(args.input_directory):
-            if file.endswith(tuple(supported_extensions)):
-                file_array.append(file)
+        if os.path.isfile(args.input_directory) and args.input_directory.endswith(
+            tuple(supported_extensions)
+        ):
+            print("Input file is supported, added.\n")
+            file_array.append(args.input_directory)
+        elif os.path.isdir(args.input_directory):
+            print("Adding supported files in input directory.\n")
+            for file in os.listdir(args.input_directory):
+                if file.endswith(tuple(supported_extensions)):
+                    file_array.append(file)
+        else:
+            raise FileNotFoundError("Input is not a valid file or directory!")
         if len(file_array) == 0:
-            raise FileNotFoundError("No supported files found in the input directory")
+            raise FileNotFoundError("No supported file(s) found in the input!")
     except FileNotFoundError as file_error:
         print(f"FileNotFoundError: {file_error}")
         return
 
-    print(f"Found {len(file_array)} files to subtitle.")
+    print(
+        f"Found {len(file_array)} file{'s' if len(file_array) > 1 else ''} to"
+        " subtitle.\n"
+    )
 
     if args.use_cpp:
-        print("Using Whisper.CPP (CPU)")
+        print("--use_cpp=True. Using Whisper.CPP (CPU).\n")
         transcribe_with_cpp(file_array, args)
-    if cuda.is_available() or args.fp16 is False:
-        print("Using OpenAI Whisper (GPU)")
+    elif cuda.is_available() or args.use_gpu:
+        print("CUDA is available. Using OpenAI Whisper (GPU).\n")
+        transcribe_with_whisper(file_array, args)
+    elif args.fp16 is False:
+        print("--args.fp16 is False. Using OpenAI Whisper (CPU).\n")
         transcribe_with_whisper(file_array, args)
     else:
-        print("Using Whisper.CPP (CPU)")
+        print("CUDA is not available. Using Whisper.CPP (CPU)\n")
         transcribe_with_cpp(file_array, args)
 
 

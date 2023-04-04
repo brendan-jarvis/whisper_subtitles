@@ -1,32 +1,64 @@
 """
 Utility functions for the subtitle generator.
 """
+import pysubs2
 
 
-def split_long_lines(text, max_line_length=42):
+def split_long_lines(result, max_line_length=42, max_lines=2):
     """
-    Split long lines into multiple lines. This is useful for subtitles, where
-    long lines can cause problems with display.
-    Default 42 characters
+    Split long lines into multiple lines. Returns a SSAFile.
     """
-    words = text.split()
-    lines = []
-    current_line = ""
+    # Create a new SSAFile object
+    subs = pysubs2.SSAFile()
 
-    for word in words:
-        if len(current_line + word) + 1 > max_line_length:
-            lines.append(current_line)
-            current_line = word
-        else:
-            if current_line == "":
-                current_line = word
+    # Add the subtitles to the file as SSAEvents
+    for segment in result["segments"]:
+        subtitle = pysubs2.SSAEvent()
+        first_word = segment["words"][0]
+        last_word = segment["words"][-1]
+        subtitle.start = int(first_word["start"] * 1000)
+        subtitle.end = int(last_word["end"] * 1000)
+
+        if len(segment["text"]) < max_line_length:
+            subtitle.text = segment["text"]
+            subs.append(subtitle)
+            continue
+
+        lines = []
+        current_line = ""
+
+        for word in segment["words"]:
+            if len(current_line) + len(word) + 1 > max_line_length:
+                if len(lines) < max_lines - 1:
+                    # Add the line and reset
+                    lines.append(current_line)
+                    current_line = word["word"].strip() + " "
+                else:
+                    # Yield a SSAEvent
+                    lines.append(current_line)
+                    subtitle.text = "\n".join(lines)
+                    last_word = segment["words"][len(lines) - 1]
+                    subtitle.start = int(segment["words"][0]["start"] * 1000)
+                    subtitle.end = int(last_word["end"] * 1000)
+                    subs.append(subtitle)
+
+                    # Reset the variables
+                    current_line = word["word"].strip() + " "
+                    lines = []
+                    subtitle = pysubs2.SSAEvent()
+                    subtitle.start = int(word["start"] * 1000)
+                    subtitle.end = int(word["end"] * 1000)
             else:
-                current_line += " " + word
+                current_line += word["word"].strip() + " "
+                subtitle.end = int(word["end"] * 1000)
 
-    if current_line != "":
+        # Add the last line in the segment
         lines.append(current_line)
+        subtitle.text = "\n".join(lines)
+        subs.append(subtitle)
 
-    return "\n".join(lines)
+    # Return the file
+    return subs
 
 
 def fix_overlapping_display_times(subs):

@@ -1,6 +1,6 @@
 # Whisper Subtitles
 
-This is a Python script that utilizes the OpenAI Whisper library to generate .srt files with subtitles for compatible audio and video files. The script generates .srt files for each file found in the specified directory using Whisper. Please note that the generated subtitles may not be completely accurate, and manual correction may be necessary.
+This is a Python script that utilizes the OpenAI Whisper library to generate .srt files with subtitles for compatible audio and video files. The script generates .srt for the file or for each file found in the specified directory using Whisper. Please note that the generated subtitles may not be completely accurate, and manual correction may be necessary.
 
 ## Uses
 
@@ -84,7 +84,7 @@ That's it! You should now be able to use the Whisper Subtitles script to generat
 
 ### Tips
 
-1. Assuming English audio the 'medium.en' produces good enough results in a relatively quick amount of time.
+1. Assuming English audio the 'medium.en' produces good enough results in a relatively quick amount of time. Even base.en produces okay subtitles.
 2. You can edit the generated subtitles using [Subtitle Edit](https://github.com/SubtitleEdit/subtitleedit)
 3. You could try "automagically" synchronizing subtitles using [FFsubsync](https://github.com/smacke/ffsubsync) - **Note: this project is intended to re-align timing on otherwise 100% accurate subtitles and may not be helpful for correcting timings on AI-generated subtitles.**
 
@@ -100,18 +100,18 @@ whisper_subtitles [-h] [-m MODEL] [-i INPUT_DIRECTORY] [-o OUTPUT_DIRECTORY] [-l
 
 The script accepts the following optional arguments:
 
-- **-m** **--model**: Language model to use. Options: tiny, base, small, medium, large.
-- **-i** **--input_directory**: Directory containing files to subtitle.
-- **-o** **--output_directory**: Directory to save subtitle files.
+- **-m** **--model**: Language model to use. Options: tiny, base, base.en, small, medium, medium.en, large.
+- **-i** **--input_directory**: Directory containing files to subtitle or file to subtitle.
+- **-o** **--output_directory**: Directory to save subtitle file(s).
 - **-l** **--language**: Language to use (see Whisper documentation for options).
 - **-c** **--condition_on_previous_text**: Condition on previous text (see Whisper documentation).
-- **-ml** **--max_line_length**: Maximum characters per line in the subtitles. Default is 42.
+- **-ml** **--max_line_length**: Maximum characters per line in the subtitle(s). Default is 42.
 - **-v** **--version**: Print version information.
 - **-fp16** **--fp16**: Use FP16 for inference.
 - **--use_cpp**: Force the use of Whisper.CPP for transcription.
 
-For example, to generate subtitles for all files in the current directory using the large language model and save the subtitles in the subtitles directory, run:
+For example, to generate subtitles for all files in the current directory using the medium.en language model and save the subtitles in the subtitles directory, run:
 
 ```
-python whisper_subtitles.py --model medium.en --language en
+whisper_subtitles -m medium.en -l en
 ```
