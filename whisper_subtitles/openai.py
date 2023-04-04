@@ -55,7 +55,9 @@ def transcribe_with_whisper(file_array, args):
                 word_timestamps=True,
                 fp16=args.fp16,
             )
-            subs: pysubs2.SSAFile = split_long_lines(result, 42, 2)
+            subs: pysubs2.SSAFile = split_long_lines(
+                result, args.char_limit, args.max_lines
+            )
 
             try:
                 # Remove miscellaneous events
