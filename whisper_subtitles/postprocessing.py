@@ -25,24 +25,17 @@ def split_long_lines(result, max_line_length=42, max_lines=2):
         # Add words to the line until it is too long
         for word in words:
             if len(line) + len(word) + 1 > max_line_length:
-                subs.append(
-                    pysubs2.SSAEvent(
-                        start=int(segment["start"] * 1000),
-                        end=int(segment["end"] * 1000),
-                        text=line,
-                    )
-                )
+                subtitle.text = line
+                subs.append(subtitle)
                 line = ""
+                subtitle = pysubs2.SSAEvent()
+                subtitle.start = int(word["start"] * 1000)
             line += word["word"]
+            subtitle.end = int(word["end"] * 1000)
 
-        # Add the last line to the file
-        subs.append(
-            pysubs2.SSAEvent(
-                start=int(segment["start"] * 1000),
-                end=int(segment["end"] * 1000),
-                text=line,
-            )
-        )
+        # Add the last subtitle
+        subtitle.text = line
+        subs.append(subtitle)
 
     # Return the file
     return subs
