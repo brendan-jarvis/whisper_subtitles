@@ -1,7 +1,7 @@
 import os
 import time
 import whisper
-from pysubs2 import load_from_whisper, exceptions
+import pysubs2
 from whisper_subtitles.postprocessing import (
     split_long_lines,
     fix_overlapping_display_times,
@@ -55,19 +55,16 @@ def transcribe_with_whisper(file_array, args):
                 word_timestamps=True,
                 fp16=args.fp16,
             )
-
-            result = split_long_lines(result)
+            subs: pysubs2.SSAFile = split_long_lines(result, 42, 2)
 
             try:
-                # Load subtitle file from OpenAI Whisper transcript
-                subs = load_from_whisper(result)
                 # Remove miscellaneous events
                 subs.remove_miscellaneous_events()
                 # Fix overlapping display times
                 fix_overlapping_display_times(subs)
                 subs.save(subtitle_path)
 
-            except exceptions.Pysubs2Error as pysubs2_error:
+            except pysubs2.Pysubs2Error as pysubs2_error:
                 print(f"Error while running pysubs2: {pysubs2_error}")
                 continue
 
