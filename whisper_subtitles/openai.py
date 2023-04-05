@@ -21,7 +21,7 @@ def transcribe_with_whisper(file_array, args):
         print(f"RuntimeError loading the model: {model_error}!")
         return
 
-    total_time = 0
+    batch_start_time = time.time()
     total_transcribed = 0
     for file in file_array:
         file_name = os.path.splitext(os.path.basename(file))[0]
@@ -72,10 +72,10 @@ def transcribe_with_whisper(file_array, args):
 
             end_time = time.time()
             subtitle_time = end_time - start_time
-            total_time += subtitle_time
             total_transcribed += 1
             print(
-                f"Subtitles for {file} saved as {subtitle_path} in {subtitle_time:.2f}s"
+                f"Subtitles for {file} saved as {subtitle_path} in"
+                f" {time.strftime('%H:%M:%S', time.gmtime(subtitle_time))}"
             )
         except FileNotFoundError as audio_error:
             print(f"FileNotFoundError: {audio_error}")
@@ -83,5 +83,9 @@ def transcribe_with_whisper(file_array, args):
         except RuntimeError as transcode_error:
             print(f"RuntimeError: {transcode_error}")
             continue
-
-    print(f"Generated subtitles for {total_transcribed} files in {total_time:.2f}s")
+    end_time = time.time()
+    total_time = end_time - batch_start_time
+    print(
+        f"Generated subtitles for {total_transcribed} files in"
+        f" {time.strftime('%H:%M:%S', time.gmtime(total_time))}"
+    )
