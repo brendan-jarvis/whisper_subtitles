@@ -23,6 +23,8 @@ def split_long_lines(result, max_line_length=42, max_lines=2):
             # If there are no words in the segment, skip it
             continue
         if len(segment["text"]) < max_line_length:
+            subtitle.start = int(segment["start"] * 1000)
+            subtitle.end = int(segment["end"] * 1000)
             subtitle.text = segment["text"]
             subs.append(subtitle)
             continue
