@@ -31,7 +31,7 @@ def split_long_lines(result, max_line_length=42, max_lines=2):
         current_line = ""
 
         for word in segment["words"]:
-            if len(current_line) + len(word) + 1 > max_line_length:
+            if len(current_line) + len(word["word"].strip() + " ") > max_line_length:
                 if len(lines) < max_lines - 1:
                     # Add the line and reset
                     lines.append(current_line)
