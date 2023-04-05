@@ -36,13 +36,11 @@ def split_long_lines(result, max_line_length=42, max_lines=2):
                     # Add the line and reset
                     lines.append(current_line)
                     current_line = word["word"].strip() + " "
+                    subtitle.end = int(word["end"] * 1000)
                 else:
                     # Yield a SSAEvent
                     lines.append(current_line)
                     subtitle.text = "\n".join(lines)
-                    last_word = segment["words"][len(lines) - 1]
-                    subtitle.start = int(segment["words"][0]["start"] * 1000)
-                    subtitle.end = int(last_word["end"] * 1000)
                     subs.append(subtitle)
 
                     # Reset the variables
