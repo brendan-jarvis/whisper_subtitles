@@ -14,11 +14,14 @@ def split_long_lines(result, max_line_length=42, max_lines=2):
     # Add the subtitles to the file as SSAEvents
     for segment in result["segments"]:
         subtitle = pysubs2.SSAEvent()
-        first_word = segment["words"][0]
-        last_word = segment["words"][-1]
-        subtitle.start = int(first_word["start"] * 1000)
-        subtitle.end = int(last_word["end"] * 1000)
-
+        if len(segment["words"]) > 0:
+            first_word = segment["words"][0]
+            last_word = segment["words"][-1]
+            subtitle.start = int(first_word["start"] * 1000)
+            subtitle.end = int(last_word["end"] * 1000)
+        else:
+            # If there are no words in the segment, skip it
+            continue
         if len(segment["text"]) < max_line_length:
             subtitle.text = segment["text"]
             subs.append(subtitle)
