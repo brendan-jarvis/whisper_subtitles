@@ -65,5 +65,5 @@ def split_long_lines(result, max_line_length=42, max_lines=2):
 def fix_overlapping_display_times(subs):
     """Find overlapping lines, reduce end time of first sub by 00:00:00,001 to fix the error."""
     for i in range(len(subs) - 1):
-        if subs[i].end > subs[i + 1].start:
+        if subs[i].end >= subs[i + 1].start:
             subs[i].end = subs[i + 1].start - 1
