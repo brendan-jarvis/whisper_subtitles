@@ -17,7 +17,8 @@ def test_whisper_cpp():
             subtitle_format=".srt",
             output_directory=tmpdir,
             condition_on_previous_text=False,
-            max_line_length=42,
+            max_lines=2,
+            char_limit=42,
             use_cpp=True,  # Will use whisper.cpp
             fp16=True,
             use_gpu=False,  # Won't use GPU
