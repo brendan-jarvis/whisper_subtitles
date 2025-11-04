@@ -17,7 +17,8 @@ def test_openai_subtitles():
             subtitle_format=".srt",
             output_directory=tmpdir,
             condition_on_previous_text=False,
-            max_line_length=42,
+            max_lines=2,
+            char_limit=42,
             use_cpp=False,  # Won't use whisper.cpp
             fp16=False,  # Avoid FP32 warning
             use_gpu=False,  # Won't use GPU
