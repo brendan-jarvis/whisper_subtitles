@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]>=7.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "whisper_subtitles"
+dynamic = ["version"]                     # version will be read from whisper_subtitles/version.py
+description = "Generate subtitles with whisper.cpp"
+authors = [{name = "Brendan Jarvis", email = "brendan.jarvis@example.com"}]
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/brendan-jarvis/whisper_subtitles"
+Repository = "https://github.com/brendan-jarvis/whisper_subtitles"
+
+[project.optional-dependencies]
+dev = ["pytest", "black"]
+
+[project.scripts]
+whisper-subtitles = "whisper_subtitles.cli:main"
