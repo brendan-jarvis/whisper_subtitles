@@ -133,3 +133,6 @@ dmypy.json
 
 # whisper.cpp
 whisper.cpp/
+
+# Version files
+whisper_subtitles/_version.py
