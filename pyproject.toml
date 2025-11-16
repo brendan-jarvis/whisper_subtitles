@@ -20,8 +20,16 @@ dev = ["pytest>=7", "black"]
 [project.scripts]
 whisper-subtitles = "whisper_subtitles.cli:main"
 
-# This tells setuptools_scm where to write the version
+# THIS IS THE KEY SECTION
 [tool.setuptools_scm]
+# Write version to a file so it's importable later
 write_to = "whisper_subtitles/_version.py"
+# Use git tags only — NO import fallback
 version_scheme = "guess-next-dev"
 local_scheme = "node-and-date"
+# CRITICAL: Disable import-based version detection
+fallback_version = "0.0.0"
+# Prevent import attempt
+package_dir = {"" = "whisper_subtitles"}
+# Ensure Git is used
+git_describe_command = "git describe --dirty --tags --long --match v*"
