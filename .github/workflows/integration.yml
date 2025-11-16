@@ -1,26 +1,61 @@
 name: Integration
+
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
+
+permissions:
+  contents: read          # default, explicit for clarity
+
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      # -------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          python-version: 3.8
+          fetch-depth: 0      # needed if you ever use setuptools_scm for version
+
+      # -------------------------------------------------
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"   # you can change to "3.8" if required
+
+      # -------------------------------------------------
       - name: Install FFmpeg
-        uses: FedericoCarboni/setup-ffmpeg@v2
-      - name: Install dependencies
+        uses: FedericoCarboni/setup-ffmpeg@v3   # v3 is the latest
+
+      # -------------------------------------------------
+      - name: Install Python dependencies
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip setuptools wheel
+          # runtime deps
           pip install -r requirements.txt
-          pip install pytest
+          # dev extras (pytest, black, …)
+          pip install ".[dev]"
+
+      # -------------------------------------------------
+      - name: Show versions (debug)
+        run: |
+          python --version
+          pip list
+          ffmpeg -version | head -n 5
+
+      # -------------------------------------------------
       - name: Run tests
-        run: pytest
+        run: |
+          pytest -vv --junitxml=junit.xml
+
+      # -------------------------------------------------
+      - name: Upload pytest report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: junit.xml
