@@ -4,24 +4,24 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "whisper_subtitles"
-dynamic = ["version"]                     # version will be read from whisper_subtitles/version.py
+dynamic = ["version"]
 description = "Generate subtitles with whisper.cpp"
 authors = [{name = "Brendan Jarvis", email = "brendan.jarvis@example.com"}]
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-]
 
 [project.urls]
 Homepage = "https://github.com/brendan-jarvis/whisper_subtitles"
-Repository = "https://github.com/brendan-jarvis/whisper_subtitles"
 
 [project.optional-dependencies]
-dev = ["pytest", "black"]
+dev = ["pytest>=7", "black"]
 
 [project.scripts]
 whisper-subtitles = "whisper_subtitles.cli:main"
+
+# This tells setuptools_scm where to write the version
+[tool.setuptools_scm]
+write_to = "whisper_subtitles/_version.py"
+version_scheme = "guess-next-dev"
+local_scheme = "node-and-date"
