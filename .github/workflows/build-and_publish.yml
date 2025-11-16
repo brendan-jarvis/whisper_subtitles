@@ -33,15 +33,13 @@ jobs:
           pip install build setuptools_scm
 
       # -------------------------------------------------
-      - name: Build package (sdist + wheel)
-        id: build
+      - name: Build package
         run: |
           python -m build --sdist --wheel --outdir dist/
-          # Capture the version that was built
-          VERSION=$(python -c "import importlib.metadata, sys; print(importlib.metadata.version('whisper_subtitles'))" 2>/dev/null || \
-                    python -c "from whisper_subtitles.version import __version__; print(__version__)")
-          echo "Built version: $VERSION"
+          # Extract version from built package
+          VERSION=$(python -c "import importlib.metadata; print(importlib.metadata.version('whisper_subtitles'))")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+        id: build
 
       # -------------------------------------------------
       - name: Create GitHub Release
