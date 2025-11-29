@@ -50,6 +50,7 @@ def transcribe_with_cpp(file_array, args):
                 stderr=subprocess.STDOUT,
             )
             encoding = encoding.stdout.decode("utf-8").strip()
+            output_file_name = os.path.splitext(os.path.basename(file))[0]
 
             if encoding == "16" and file.endswith(".wav"):
                 # If file is already 16-bit WAV format, copy it to the temp directory
@@ -58,13 +59,12 @@ def transcribe_with_cpp(file_array, args):
                     [
                         "cp",
                         f"{args.input_directory}{file}",
-                        f"{temp_dir}/{os.path.splitext(os.path.basename(file))[0]}.wav",
+                        f"{temp_dir}/{output_file_name}.wav",
                     ],
                     check=True,
                 )
             else:
                 # Otherwise convert file to 16-bit WAV format and save it in the temp directory
-                output_file_name = os.path.splitext(os.path.basename(file))[0]
                 print(
                     f"In {os.getcwd()} converting {args.input_directory}{file} to"
                     " 16-bit WAV format...\n"
