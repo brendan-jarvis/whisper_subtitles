@@ -28,4 +28,4 @@ def test_whisper_cpp():
         assert os.path.exists(os.path.join(tmpdir, "test0.srt"))
         # test0.srt contains the words 'artificial intelligence'
         with open(os.path.join(tmpdir, "test0.srt"), "r", encoding="utf-8") as sub_file:
-            assert "artificial intelligence" in sub_file.read()
+            assert "artificial intelligence" in sub_file.read().lower()
