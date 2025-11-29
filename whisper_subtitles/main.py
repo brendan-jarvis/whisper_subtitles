@@ -14,7 +14,11 @@ import argparse
 from torch import cuda
 from .whisper_cpp import transcribe_with_cpp
 from .openai import transcribe_with_whisper
-from .version import __version__ as version
+try:
+    from ._version import __version__ as version
+except ImportError:
+    from importlib.metadata import version as get_version
+    version = get_version("whisper_subtitles")
 
 
 def cli():

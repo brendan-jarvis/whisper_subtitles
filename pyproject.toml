@@ -10,6 +10,11 @@ authors = [{name = "Brendan Jarvis", email = "brendan.jarvis@example.com"}]
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
+dependencies = [
+    "numpy>=1.23.5",
+    "openai-whisper",
+    "pysubs2",
+]
 
 [project.urls]
 Homepage = "https://github.com/brendan-jarvis/whisper_subtitles"
@@ -25,5 +30,4 @@ write_to = "whisper_subtitles/_version.py"
 version_scheme = "guess-next-dev"
 local_scheme = "node-and-date"
 fallback_version = "0.0.0"
-package_dir = {"" = "whisper_subtitles"}
 git_describe_command = "git describe --dirty --tags --long --match v*"
