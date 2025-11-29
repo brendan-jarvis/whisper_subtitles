@@ -12,16 +12,23 @@ def transcribe_with_cpp(file_array, args):
         subprocess.run(
             ["git", "clone", "https://github.com/ggerganov/whisper.cpp.git"], check=True
         )
-        subprocess.run(["make"], check=True, cwd="whisper.cpp")
 
-    # Check if the model exists
+    # Build whisper.cpp using cmake if not already built
+    if not os.path.exists("whisper.cpp/build/bin/whisper-cli"):
+        subprocess.run(["cmake", "-B", "build"], check=True, cwd="whisper.cpp")
+        subprocess.run(
+            ["cmake", "--build", "build", "--config", "Release"],
+            check=True,
+            cwd="whisper.cpp",
+        )
+
+    # Check if the model exists, download if needed
     if not os.path.exists(f"whisper.cpp/models/ggml-{args.model}.bin"):
         print(f"Model {args.model} does not exist. Downloading...")
         subprocess.run(
             ["bash", "whisper.cpp/models/download-ggml-model.sh", f"{args.model}"],
             check=True,
         )
-        return
 
     # Create a temp directory
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -89,13 +96,13 @@ def transcribe_with_cpp(file_array, args):
             # Run whisper.cpp on the 16-bit .wav file
             subprocess.run(
                 [
-                    "whisper.cpp/main",
+                    "whisper.cpp/build/bin/whisper-cli",
                     "-f",
                     f"{temp_dir}/{output_file_name}.wav",
                     "-m",
                     f"whisper.cpp/models/ggml-{args.model}.bin",
                     "--max-len",
-                    f"{args.max_line_length}",
+                    f"{args.char_limit}",
                     f"--output-{args.subtitle_format.replace('.', '')}",
                     "-of",
                     f"{args.output_directory}/{output_file_name}",
