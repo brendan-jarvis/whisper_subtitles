@@ -9,7 +9,7 @@ description = "Generate subtitles with whisper.cpp"
 authors = [{name = "Brendan Jarvis", email = "brendan.jarvis@example.com"}]
 readme = "README.md"
 requires-python = ">=3.8"
-license = {text = "MIT"}
+license = "MIT"
 dependencies = [
     "numpy>=1.23.5",
     "openai-whisper",
@@ -24,6 +24,9 @@ dev = ["pytest>=7", "black"]
 
 [project.scripts]
 whisper-subtitles = "whisper_subtitles.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["whisper_subtitles*"]
 
 [tool.setuptools_scm]
 write_to = "whisper_subtitles/_version.py"
